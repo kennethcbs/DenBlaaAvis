@@ -1,4 +1,3 @@
-const { error } = require('console');
 var fs = require('fs')
 
 const users = [];
@@ -83,6 +82,19 @@ function deleteUser(userEmail, res) {
 }
 
 
+function getAllUsers(res) {
+    fs.readFile('userDB.json', (error, allUsers) => {
+        if(error) {
+            console.log('Error getting all users', error)
+            res.send('could not get all users')
+        } else {
+            const parsedUsers = JSON.parse(allUsers)
+            console.log('Getting all users succes', allUsers)
+            res.send(parsedUsers)
+        }
+    })
+}
 
 
-module.exports = { saveUser, users, deleteUser }
+
+module.exports = { saveUser, users, deleteUser, getAllUsers }

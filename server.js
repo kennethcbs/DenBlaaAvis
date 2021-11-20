@@ -25,7 +25,7 @@ app.post('/register', (req, res) => {
 
 // Endpoint to get all users
 app.get('/getAllUsers', (req, res) => {
-    res.send(data.users)
+    data.getAllUsers(res)
 })
 
 // Endpoint to delete an user
