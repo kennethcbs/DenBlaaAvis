@@ -12,20 +12,15 @@ app.get('/',(req, res) => {
 // User Endpoints
 
 app.post('/register', (req, res) => {
-    let newUser = {
+// Laver en ny bruger som vil kalde på vores function saveUser
+   let newUser = { 
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         products: []
-    }
-    const found = data.users.find((user => user.email === newUser.email))
-    if (found) {
-        console.log('Cannot create user with this email')
-    } else {
-        data.users.push(newUser)
-        console.log('User was successfully created')
-    }
-    res.send('register')
+    } 
+    data.saveUser(newUser, res)
+
 })
 
 // Endpoint to get all users
@@ -34,11 +29,8 @@ app.get('/getAllUsers', (req, res) => {
 })
 
 // Endpoint to delete an user
-app.delete('/deleteUser', (req, res) => {
-    const index = data.users.findIndex(user => user.email === req.body.email)
-
-    data.users.splice(index, 1)
-    res.send(data.users)
+app.delete('/deleteUser/:userEmail', (req, res) => {
+    data.deleteUser(req.params.userEmail, res)
 })
 
 // Endpoint to update an user
@@ -73,19 +65,21 @@ app.post('/updateUser/:userEmail', (req, res) => {
 const PORT = 3000;
 app.listen(PORT,() => {
     console.log(`Server is listening on port: ${PORT}`);
-    fs.access('./userDB.txt', (err) => {
+    fs.access('./userDB.json', (err) => {
         if(err){
-            console.log('creating user database userDB.txt')
+            console.log('creating user database userDB.json')
+            const userArray = []
+            const jsonArray = JSON.stringify(userArray);
 
-            fs.open('userDB.txt', 'w', function(err) {
+            fs.writeFile('./userDB.json', jsonArray, (err) => {
                 if(err){
                     console.log("something went wrong creating DB", err)
                 } else {
-                    console.log("created database userDB.txt")
+                    console.log("created database userDB.json")
                 }
             })
         } else{
-            console.log("server using userDB.txt as userdatabase")
+            console.log("server using userDB.json as userdatabase")
         }
     })
 });
