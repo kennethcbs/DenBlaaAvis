@@ -2,11 +2,31 @@ const express = require ('express');
 var fs = require('fs');
 const app = express();
 const data = require("./data")
+var path = require('path');
 app.use(express.json());
 
-app.get('/',(req, res) => {
-    res.sendFile(path.join(__dirname,'./public/pages/home.html'));
+app.get('/registration',(req, res) => {
+    res.sendFile(path.join(__dirname,'./pages/register.html'));
 });
+
+app.get('/login',(req, res) => {
+    console.log(data.loggedInUserEmail)
+    if(data.loggedInUserEmail === "") {
+        res.sendFile(path.join(__dirname,'./pages/login.html'));
+    } else {
+        res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
+    }
+});
+
+app.get('/dashboard',(req, res) => {
+    res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
+});
+
+app.get('/settings',(req, res) => {
+    res.sendFile(path.join(__dirname,'./pages/userSetting.html'));
+});
+
+var loggedInUserEmail = ""
 
 
 // User Endpoints
@@ -19,8 +39,18 @@ app.post('/register', (req, res) => {
         password: req.body.password,
         products: []
     } 
-    data.saveUser(newUser, res)
+     data.saveUser(newUser, res)
 
+})
+
+app.post('/updateUser', (req, res) => {
+    let newUser = { 
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        products: []
+    } 
+     data.updateUser(newUser, res)
 })
 
 // Endpoint to get all users
@@ -28,14 +58,18 @@ app.get('/getAllUsers', (req, res) => {
     data.getAllUsers(res)
 })
 
+// Endpoint to get all users
+app.get('/getLoggedInUser', (req, res) => {
+    data.getLoggedInUser(res);
+})
+
 // Endpoint to delete an user
-app.delete('/deleteUser/:userEmail', (req, res) => {
-    data.deleteUser(req.params.userEmail, res)
+app.delete('/deleteUser', (req, res) => {
+    data.deleteUser(res)
 })
 
 // Endpoint to update an user
 app.post('/updateUser/:userEmail', (req, res) => {
-    const found = data.users.find((user => user.email === req.params.userEmail))
     console.log(req.params.userEmail)
 
     if (found) {
@@ -55,7 +89,41 @@ app.post('/updateUser/:userEmail', (req, res) => {
     res.send(data.users)
 })
 
+// Endpoint to login
+app.post('/login', (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+    data.login(email, password, res)
+    console.log(loggedInUserEmail);
+})
 
+
+// Endpoints to products
+
+app.post('/createProduct', async (req, res) => {
+    try {
+        let productId = uniqid();
+
+        const userEmail = session.userEmail;
+
+        let user = users.find((data) => data.email === userEmail);
+
+        let newProduct = {
+            title: req.body.title,
+            category: req.body.category,
+            price: req.body.price,
+            productId: productId
+        };
+
+        user.products.push(productId);
+        products.push(newProduct);
+        console.log(user.products)
+        console.log(products)
+        res.sendFile(path.join(__dirname,'./public/main.html'));
+    } catch {
+        res.send("Cant register new product")
+    }
+});
 
 
 

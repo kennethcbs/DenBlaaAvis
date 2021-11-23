@@ -1,6 +1,10 @@
-var fs = require('fs')
+var fs = require('fs');
 
 const users = [];
+
+var loggedInUserEmail = "";
+console.log(loggedInUserEmail)
+console.log("hej")
 
 
 function saveUser(user, res) {
@@ -34,18 +38,18 @@ function saveUser(user, res) {
                     if(error) {
                         console.log('something went wrong writing to file', error);
                     } else {
-                        res.send("Registered user")
+                        res.status(200).send(true);
                     }
                 })
             } else {
                 console.log('user already exist')
-                res.send("Could not register user")
+                res.status(404).end()
             }
         }
     })
 }
 
-function deleteUser(userEmail, res) {
+function deleteUser(res) {
     // Find user
     fs.readFile('userDB.json', (error, allUser) => {
         if(error) {
@@ -57,9 +61,10 @@ function deleteUser(userEmail, res) {
 
             for (var i = 0; i < parsedUsers.length; i++) {
                 console.log(parsedUsers[i].email)
-                if(userEmail === parsedUsers[i].email) {
+                if(loggedInUserEmail === parsedUsers[i].email) {
                     parsedUsers.splice(i, 1);
                     found = true
+                    loggedInUserEmail = ""
                 }
             }
             if (found === true) {
@@ -89,12 +94,98 @@ function getAllUsers(res) {
             res.send('could not get all users')
         } else {
             const parsedUsers = JSON.parse(allUsers)
-            console.log('Getting all users succes', allUsers)
-            res.send(parsedUsers)
+            console.log('Getting all users succes')
+            res.send(allUsers);
         }
     })
 }
 
+function login(email, password, res) {
+    fs.readFile('userDB.json', (error, allUsers) => {
+        if(error) {
+            console.log('Error trying to login', error)
+            res.send('couldnt login')
+        } else {
+            const parsedUsers = JSON.parse(allUsers)
+            for(var i = 0; i < parsedUsers.length; i++) {
+                if (email === parsedUsers[i].email && password === parsedUsers[i].password) {
+                    res.send("login successfull")
+
+                    // Setter logged in bruger
+                    loggedInUserEmail = email;
+                    console.log(loggedInUserEmail)
+                    return
+                } 
+            }
+            res.status(404).end()
+        }
+    })
+}
+
+function getLoggedInUser(res) {
+    fs.readFile('userDB.json', (error, allUsers) => {
+        const parsedUsers = JSON.parse(allUsers)
+        for(var i = 0; i < parsedUsers.length; i++) {
+            if (loggedInUserEmail === parsedUsers[i].email) {
+                res.send(parsedUsers[i]);
+                return;
+            }
+        }
+        res.send("Could not find user");
+        return;
+    })
+}
+
+function updateUser(user, res) {
+    fs.readFile('userDB.json', (error, allUsers) => {
+        if(error) {
+            res.send("Could not update user");
+            return;
+        } else {
+            const parsedUsers = JSON.parse(allUsers);
+            for(var i = 0; i < parsedUsers.length; i++) {
+                if(loggedInUserEmail === parsedUsers[i].email) {
+                    
+                    // Laver opdateret bruger
+                    if(user.email == "") {
+                        user.email = parsedUsers[i].email;
+                    }
+
+                    if(user.password == "") {
+                        user.password = parsedUsers[i].password;
+                    }
+
+                    if(user.username == "") {
+                        user.username = parsedUsers[i].username;
+                    }
+
+                    // Sletter gammel bruger
+                    parsedUsers.splice(i, 1);
+
+                    // Tilføjer opdateret bruger
+                    parsedUsers.push(user);
+                    
+                    // Tilføjer bruger array til db
+                    const jsonUsers = JSON.stringify(parsedUsers);
+                    fs.writeFile('userDB.json', jsonUsers, (error) => {
+                        if(error) {
+                            console.log("Could not update user");
+                            res.send("Could not update user");
+                            return;
+                        } else {
+                            console.log("Succesfully updated user");
+                            res.send("Succesfully updated user");
+                            return;
+                        }
+                    })
+                }
+            }
+            
+        }
+            return;
+
+    })
+}
 
 
-module.exports = { saveUser, users, deleteUser, getAllUsers }
+module.exports = { saveUser, users, deleteUser, getAllUsers, login, getLoggedInUser, updateUser, loggedInUserEmail }
