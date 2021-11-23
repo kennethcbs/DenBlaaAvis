@@ -3,6 +3,7 @@ var fs = require('fs');
 const app = express();
 const data = require("./data")
 var path = require('path');
+var uniqid = require('uniqid'); 
 app.use(express.json());
 
 app.get('/registration',(req, res) => {
@@ -100,13 +101,9 @@ app.post('/login', (req, res) => {
 
 // Endpoints to products
 
-app.post('/createProduct', async (req, res) => {
-    try {
+app.post('/createProduct', (req, res) => {
+     
         let productId = uniqid();
-
-        const userEmail = session.userEmail;
-
-        let user = users.find((data) => data.email === userEmail);
 
         let newProduct = {
             title: req.body.title,
@@ -114,20 +111,8 @@ app.post('/createProduct', async (req, res) => {
             price: req.body.price,
             productId: productId
         };
-
-        user.products.push(productId);
-        products.push(newProduct);
-        console.log(user.products)
-        console.log(products)
-        res.sendFile(path.join(__dirname,'./public/main.html'));
-    } catch {
-        res.send("Cant register new product")
-    }
+        data.createProduct(newProduct, res);
 });
-
-
-
-
 
 
 const PORT = 3000;
@@ -148,6 +133,24 @@ app.listen(PORT,() => {
             })
         } else{
             console.log("server using userDB.json as userdatabase")
+        }
+    })
+
+    fs.access('./productDB.json', (err) => {
+        if(err){
+            console.log('creating product database productDB.json')
+            const userArray = []
+            const jsonArray = JSON.stringify(userArray);
+
+            fs.writeFile('./productDB.json', jsonArray, (err) => {
+                if(err){
+                    console.log("something went wrong creating DB", err)
+                } else {
+                    console.log("created database productDB.json")
+                }
+            })
+        } else{
+            console.log("server using productDB.json as productdatabase")
         }
     })
 });

@@ -86,25 +86,12 @@ function deleteUser(res) {
     })
 }
 
-
-function getAllUsers(res) {
-    fs.readFile('userDB.json', (error, allUsers) => {
-        if(error) {
-            console.log('Error getting all users', error)
-            res.send('could not get all users')
-        } else {
-            const parsedUsers = JSON.parse(allUsers)
-            console.log('Getting all users succes')
-            res.send(allUsers);
-        }
-    })
-}
-
 function login(email, password, res) {
     fs.readFile('userDB.json', (error, allUsers) => {
         if(error) {
             console.log('Error trying to login', error)
             res.send('couldnt login')
+            return;
         } else {
             const parsedUsers = JSON.parse(allUsers)
             for(var i = 0; i < parsedUsers.length; i++) {
@@ -118,23 +105,11 @@ function login(email, password, res) {
                 } 
             }
             res.status(404).end()
+            return;
         }
     })
 }
 
-function getLoggedInUser(res) {
-    fs.readFile('userDB.json', (error, allUsers) => {
-        const parsedUsers = JSON.parse(allUsers)
-        for(var i = 0; i < parsedUsers.length; i++) {
-            if (loggedInUserEmail === parsedUsers[i].email) {
-                res.send(parsedUsers[i]);
-                return;
-            }
-        }
-        res.send("Could not find user");
-        return;
-    })
-}
 
 function updateUser(user, res) {
     fs.readFile('userDB.json', (error, allUsers) => {
@@ -187,5 +162,55 @@ function updateUser(user, res) {
     })
 }
 
+// Product functionality 
 
-module.exports = { saveUser, users, deleteUser, getAllUsers, login, getLoggedInUser, updateUser, loggedInUserEmail }
+function createProduct (newProduct, res) {
+
+    fs.readFile('userDB.json', (error, allUsers) => {
+        if(error) {
+            res.status(401).end();
+            return;
+        } else {
+            var parsedUsers = JSON.parse(allUsers);
+            for(var i = 0; i < parsedUsers.length; i++) {
+                if(loggedInUserEmail === parsedUsers[i].email) {
+                    parsedUsers[i].products.push(newProduct)
+                    const jsonUser = JSON.stringify(parsedUsers);
+                    fs.writeFile('userDB.json', jsonUser, (error) => {
+                        if(error) {
+                            res.status(401).end()
+                            return;
+                        } 
+                    })
+                   
+                } 
+            }
+        }
+    })
+
+    fs.readFile('productDB.json', (error, allProducts) => {
+        if(error) {
+            res.status(401).end();
+            return;
+        } else {
+            const parsedProducts = JSON.parse(allProducts);
+            parsedProducts.push(newProduct)
+
+            const jsonProducts = JSON.stringify(parsedProducts)
+
+            fs.writeFile('./productDB.json', jsonProducts, (error) => {
+                if(error) {
+                    res.status(401).end();
+                    return;
+                } else {
+                    res.send('Successfully created product');
+                    return;
+                }
+            })
+        }
+     })
+}
+
+
+
+module.exports = { saveUser, users, deleteUser, login, updateUser, loggedInUserEmail, createProduct }
