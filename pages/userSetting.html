@@ -12,7 +12,7 @@
 		}
 	</style>
 </head>
-<body>
+<body onload="getAllUsersProducts()">
 	<form id="form">
 		<h1 class="text">Settings</h1>
 			<label>Username</label>
@@ -24,7 +24,7 @@
 			<br><br>
 
 			<label>Password</label>
-			<input type="password" id="password" name="password" >
+			<input type="text" id="password" name="password" >
 			<br><br>
 
 			<button class="regbtn" type ="reset">Reset</button>
@@ -33,6 +33,14 @@
 	<br><br>
       <button onclick="deleteUser()" class="regbtn" type="submit" id="delete">Delete user</button>
       <br><br><br><br>
+
+      <ul>
+            <li><a href="/dashboard">dashboard</a></li>
+
+          </ul>
+
+      <p>All your active products</p>
+      <div id="allProducts"></div>
 
     <script>
       function deleteUser() {
@@ -52,8 +60,12 @@
           });
       }
 
+      function updateProduct (productId) {
+        location.href = `/updateProduct/${productId}`;
+      }
 
-        document.getElementById("form").addEventListener("submit", (event) => {
+      // UPDATE USER
+      document.getElementById("form").addEventListener("submit", (event) => {
             event.preventDefault();
             const username = document.getElementById("username").value
             const email = document.getElementById("email").value;
@@ -84,6 +96,62 @@
         });
 
         });
+
+        function getAllUsersProducts() {
+            let allProducts;
+
+            fetch("http://localhost:3000/getAllUsersProducts", {
+             method: "GET",
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response) {
+                    var str = '<ul>'
+
+                    response.forEach(function(product) {
+                        str += '<li>' + " " + product.title + " " + product.category + " " + product.price
+                           +  `<button value="${product.productId}" onclick="updateProduct(this.value)">` + "Update product"
+                           + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)">` + "Delete" + '</button>'
+                           + '</li>';
+                    }); 
+
+                    str += '</ul>';
+
+                    document.getElementById("allProducts").innerHTML = str;
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl");
+            });
+
+
+            //var slides = [{"title":"ps2","category":"gaming","price":"500","productId":"oupg9zkwcch15s"},{"title":"ps5","category":"gaming","price":"500","productId":"oupg9zkwcchhop"}]
+            
+        }
+
+        function deleteProduct(productId) {
+            let product = {
+                productId: productId
+            }
+
+            fetch("http://localhost:3000/deleteProduct", {
+             method: "DELETE",
+             headers: {
+                 "Content-Type": "application/json"
+             },
+             body: JSON.stringify(product)
+            })
+            .then((response) => response.text())
+            .then((response) => {
+                if (response) {
+                    location.href = "/settings";
+                    window.alert("product deleted");
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl prøvede at slette");
+            });
+        }
       </script> 
   </body>
 </html>

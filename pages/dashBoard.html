@@ -6,14 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
+<body onload="getAllProducts()">
     <div>
-        <p>hej</p>
+        <p>Navigations</p>
         <ul>
             <li><a href="/login">login</a></li>
             <li><a href="/registration">register</a></li>
-            <li><a href="/settings">settings</a></li>
           </ul>
     </div>
+    <div id="productContainer">
+
+    </div>
+
+    <script>
+        function getAllProducts() {
+            let allProducts;
+
+            fetch("http://localhost:3000/getAllProducts", {
+             method: "GET",
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response) {
+                    console.log(response)
+                    var str = '<ul>'
+
+                    response.forEach(function(product) {
+                        str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                    }); 
+
+                    str += '</ul>';
+
+                    document.getElementById("productContainer").innerHTML = str;
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl");
+            });
+            
+        }
+
+
+    </script>
 </body>
 </html>

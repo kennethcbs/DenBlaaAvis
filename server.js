@@ -7,29 +7,65 @@ var uniqid = require('uniqid');
 app.use(express.json());
 
 app.get('/registration',(req, res) => {
-    res.sendFile(path.join(__dirname,'./pages/register.html'));
+    const isLoggedIn = data.isLoggedIn();
+
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/dashBoardLoggedIn.html'));
+    } else {
+        res.sendFile(path.join(__dirname,'./pages/register.html'));
+    }
 });
 
 app.get('/login',(req, res) => {
-    console.log(data.loggedInUserEmail)
-    if(data.loggedInUserEmail === "") {
+    const isLoggedIn = data.isLoggedIn();
+    
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/dashBoardLoggedIn.html'));
+    } else {
         res.sendFile(path.join(__dirname,'./pages/login.html'));
+    }
+});
+
+app.get('/dashboard',(req, res) => {
+    const isLoggedIn = data.isLoggedIn();
+
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/dashBoardLoggedIn.html'));
+
     } else {
         res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
     }
 });
 
-app.get('/dashboard',(req, res) => {
-    res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
-});
-
 app.get('/settings',(req, res) => {
-    res.sendFile(path.join(__dirname,'./pages/userSetting.html'));
-});
+    const isLoggedIn = data.isLoggedIn();
 
-var loggedInUserEmail = ""
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/settings.html'));
 
+    } else {
+        res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
+    }});
 
+app.get('/createProduct',(req, res) => {
+    const isLoggedIn = data.isLoggedIn();
+
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/createProduct.html'));
+
+    } else {
+        res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
+}});
+
+app.get('/updateProduct/:productId',(req, res) => {
+    const isLoggedIn = data.isLoggedIn();
+
+    if(isLoggedIn) {
+        res.sendFile(path.join(__dirname,'./pages/updateProduct.html'));
+
+    } else {
+        res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
+}});
 // User Endpoints
 
 app.post('/register', (req, res) => {
@@ -95,7 +131,6 @@ app.post('/login', (req, res) => {
     const email = req.body.email
     const password = req.body.password
     data.login(email, password, res)
-    console.log(loggedInUserEmail);
 })
 
 
@@ -109,10 +144,23 @@ app.post('/createProduct', (req, res) => {
             title: req.body.title,
             category: req.body.category,
             price: req.body.price,
-            productId: productId
+            productId: productId,
+            ownerEmail: ""
         };
         data.createProduct(newProduct, res);
 });
+
+app.delete('/deleteProduct', (req, res) => {
+    data.deleteProduct(req.body.productId, res);
+})
+
+app.get('/getAllProducts', (req, res) => {
+    data.getAllProducts(res);
+})
+
+app.get('/getAllUsersProducts', (req, res) => {
+    data.getAllUsersProducts(res);
+})
 
 
 const PORT = 3000;
