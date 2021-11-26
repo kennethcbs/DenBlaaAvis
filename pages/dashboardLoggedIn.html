@@ -25,8 +25,20 @@
       <button onclick="getAllProductsWithCategory()" class="regbtn" type="submit" id="submit">Submit</button>
     <div id="productContainer"></div>
 
-    <button id="logOut">Log Out</button>
+    <button id="logout" onclick="logout()">Logout</button>
     <script>
+        function logout() {
+            fetch("http://localhost:3000/logout", {
+                method: "POST",
+            })
+            .then((response) => response.text())
+            .then((response) => {
+                if(response) {
+                    location.href = "/dashboard";
+                    window.alert("logged out")
+                }
+            })
+        }
 
         function getAllProductsWithCategory() {
             let allProducts;

@@ -16,11 +16,11 @@
 	<form id="form">
 		<h1 class="text">Update product</h1>
         <label>Title</label>
-        <input type="text" id='title' name="title" placeholder="title" required>
+        <input type="text" id='title' name="title" placeholder="title" >
         <br><br>
 
         <label>Category</label>
-        <select id="category" name="category" required>
+        <select id="category" name="category" >
             <option value="electronic">electronic</option>
             <option value="cloth">cloth</option>
             <option value="furnitures">furnitures</option>
@@ -28,7 +28,7 @@
         <br><br>
 
         <label>Price</label>
-        <input type="number" id="price" name="price" required>
+        <input type="number" id="price" name="price" >
         <br><br>
 
         <button class="regbtn" type ="reset">Reset</button>
@@ -39,17 +39,25 @@
     <script>
         document.getElementById("form").addEventListener("submit", (event) => {
             event.preventDefault();
+
+            const path = window.location.pathname;
+            const productId = path.substring(15)
+            console.log(productId)
+            console.log(typeof(productId))
+
             const title = document.getElementById("title").value
             const category = document.getElementById("category").value;
             const price = document.getElementById("price").value
+            
 
             const product = {
                 title: title,
                 category: category,
-                price: price
+                price: price,
+                productId: productId
             }
             
-        fetch("http://localhost:3000/createProduct", {
+        fetch("http://localhost:3000/updateProduct", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,10 +68,11 @@
         .then((response) => {
           if (response) {
            location.href = "/dashboard";
+           window.alert("Updated product");
           } 
         })
         .catch(() => {
-          window.alert("Cant create product");
+          window.alert("Cant update product");
         });
 
         });

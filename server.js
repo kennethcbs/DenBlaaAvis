@@ -18,7 +18,7 @@ app.get('/registration',(req, res) => {
 
 app.get('/login',(req, res) => {
     const isLoggedIn = data.isLoggedIn();
-    
+
     if(isLoggedIn) {
         res.sendFile(path.join(__dirname,'./pages/dashBoardLoggedIn.html'));
     } else {
@@ -41,7 +41,7 @@ app.get('/settings',(req, res) => {
     const isLoggedIn = data.isLoggedIn();
 
     if(isLoggedIn) {
-        res.sendFile(path.join(__dirname,'./pages/settings.html'));
+        res.sendFile(path.join(__dirname,'./pages/userSetting.html'));
 
     } else {
         res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
@@ -66,7 +66,9 @@ app.get('/updateProduct/:productId',(req, res) => {
     } else {
         res.sendFile(path.join(__dirname,'./pages/dashBoard.html'));
 }});
-// User Endpoints
+////////////////////
+// User Endpoints //
+////////////////////
 
 app.post('/register', (req, res) => {
 // Laver en ny bruger som vil kalde på vores function saveUser
@@ -133,8 +135,18 @@ app.post('/login', (req, res) => {
     data.login(email, password, res)
 })
 
+//Endpoint to logout
+app.post('/logout', (req, res) => {
 
-// Endpoints to products
+    
+    data.logout(res)
+})
+
+
+
+///////////////////////////
+// Endpoints to products //
+///////////////////////////
 
 app.post('/createProduct', (req, res) => {
      
@@ -161,6 +173,22 @@ app.get('/getAllProducts', (req, res) => {
 app.get('/getAllUsersProducts', (req, res) => {
     data.getAllUsersProducts(res);
 })
+
+app.post('/updateProduct', (req, res) => {
+    let newProduct = {
+        title: req.body.title,
+        category: req.body.category,
+        price: req.body.price,
+        productId: req.body.productId,
+        ownerEmail: ""
+    };
+
+    console.log(newProduct);
+
+
+    data.updateProduct(newProduct, res);
+})
+
 
 
 const PORT = 3000;

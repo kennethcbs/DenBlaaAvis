@@ -106,18 +106,18 @@
             .then((response) => response.json())
             .then((response) => {
                 if (response) {
-                    var str = '<ul>'
+                    var updateProduct = '<ul>'
 
                     response.forEach(function(product) {
-                        str += '<li>' + " " + product.title + " " + product.category + " " + product.price
+                        updateProduct += '<li>' + " " + product.title + " " + product.category + " " + product.price
                            +  `<button value="${product.productId}" onclick="updateProduct(this.value)">` + "Update product"
                            + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)">` + "Delete" + '</button>'
                            + '</li>';
                     }); 
 
-                    str += '</ul>';
+                    updateProduct += '</ul>';
 
-                    document.getElementById("allProducts").innerHTML = str;
+                    document.getElementById("allProducts").innerHTML = updateProduct;
                 } 
             })
             .catch(() => {

@@ -29,15 +29,15 @@
             .then((response) => {
                 if (response) {
                     console.log(response)
-                    var str = '<ul>'
+                    var productListString = '<ul>'
 
                     response.forEach(function(product) {
-                        str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                        productListString += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
                     }); 
 
-                    str += '</ul>';
+                    productListString += '</ul>';
 
-                    document.getElementById("productContainer").innerHTML = str;
+                    document.getElementById("productContainer").innerHTML = productListString;
                 } 
             })
             .catch(() => {

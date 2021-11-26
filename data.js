@@ -1,7 +1,7 @@
 var fs = require('fs');
 
-const users = [];
-
+// Global variable som jeg vil bruge til at forblive logget
+// Den er koblet sammen med min login funktion
 var loggedInUserEmail = "";
 
 
@@ -9,6 +9,9 @@ var loggedInUserEmail = "";
 // USER FUNCTIONALITY ///////
 ////////////////////////////////
 
+// Spørger min if statment om min loggedInUser er lige med et tomt felt
+// Hvis feltet ikke er tomt returnere den false og betyder at der er en bruger logget ind
+// Hvis feltet er tomt returnere den true og betyder at der ikke er en bruger logget ind
 function isLoggedIn() {
     if(loggedInUserEmail === "") {
         return false;
@@ -57,15 +60,18 @@ function deleteUser(res) {
     let found = false
 
     for (var i = 0; i < parsedUsers.length; i++) {
+        // Efter for loopet finder den en email som stemmer overens med den email jeg er logget ind med
         if(loggedInUserEmail === parsedUsers[i].email) {
+            //Efterfulgt finder vi indekset på emailen og splicer den ene user 
             parsedUsers.splice(i, 1);
             found = true
+            // Indikere at brugeren nu er logget ud (Slettet)
             loggedInUserEmail = ""
         }
     }
     if (found === true) {
+        // found er lige med true stringifyer vi vores array og tilføjer til DB
         const jsonUsers = JSON.stringify(parsedUsers)
-
         fs.writeFileSync('userDB.json', jsonUsers);
           res.send("User deleted");
     } else {
@@ -74,9 +80,12 @@ function deleteUser(res) {
 }
 
 function login(email, password, res) {
+    // Læser vores userDB file som bliver lagt over i vores const variable
     const allUsers = fs.readFileSync('userDB.json');
 
+    // Parser vores json object til et array
     const parsedUsers = JSON.parse(allUsers)
+    // Looper igennem vores array til at finde om en bruger eksistere med vores input
     for(var i = 0; i < parsedUsers.length; i++) {
         if (email === parsedUsers[i].email && password === parsedUsers[i].password) {
             res.send("login successfull")
@@ -95,6 +104,7 @@ function updateUser(user, res) {
     const allUsers = fs.readFileSync('userDB.json');
 
     const parsedUsers = JSON.parse(allUsers);
+            // Looper igennem vores array for at finde en email der passer i vores array
             for(var i = 0; i < parsedUsers.length; i++) {
                 if(loggedInUserEmail === parsedUsers[i].email) {
                     
@@ -102,7 +112,8 @@ function updateUser(user, res) {
                     if(user.email == "") {
                         user.email = parsedUsers[i].email;
                     }
-
+                    // De tomme string er det jeg vil opdatere på den nye user
+                    // Hvis de forbliver tomme, så forbliver de gamle informationer på useren det samme
                     if(user.password == "") {
                         user.password = parsedUsers[i].password;
                     }
@@ -129,6 +140,13 @@ function updateUser(user, res) {
             res.status(401).end();
 }
 
+function logout(res) {
+    loggedInUserEmail = ""
+    res.send('logged out successfull')
+    return;
+}
+
+
 ////////////////////////////////
 // PRODUCT FUNCTIONALITY ///////
 ////////////////////////////////
@@ -144,7 +162,7 @@ function createProduct (newProduct, res) {
     // Bruger denne variable til at teste om produktet blev gemt hos brugere succesfull
     var saveProductInUserSucess = false;
 
-    // Parser alle brugene til js objekt
+    // Parser json objectet til den type array jeg skal bruge
     var parsedUsers = JSON.parse(allUsers);
 
     // Finder den rigtige user og lægger produktet i users products array
@@ -187,25 +205,31 @@ function createProduct (newProduct, res) {
 }
 
 function getAllProducts(res) {
+    // Henter alle produkter fra productDB og parser det til et array
     let rawData = fs.readFileSync('productDB.json');
     const parsedData = JSON.parse(rawData);
 
+    // Returnere alle produkter
     res.send(parsedData);
     return;
 }
 
 function getAllUsersProducts(res) {
+    // Henter alle produkter fra productDB og parser det til et array
     const allProducts = fs.readFileSync('productDB.json');
     const parsedProducts = JSON.parse(allProducts);
 
+    // Variable med vores usersprodukt med et tomt array 
     var usersProducts = [];
 
+    // Loop som finder en email der stemmer overens med userens produkt og pusher alle hans produkter ind i arrayet
     for(let i = 0; i < parsedProducts.length; i++) {
         if(parsedProducts[i].ownerEmail === loggedInUserEmail) {
             usersProducts.push(parsedProducts[i]);
         }
     }
 
+    // Returnere brugerens produkter
     res.send(usersProducts);
     return;
 
@@ -276,45 +300,66 @@ function deleteProduct(productId, res) {
     } 
 }
 
-function updateProduct(product, res) {
-    const allProducts = fs.readFileSync('userDB.json');
+function updateProduct(updatedProduct, res) {
+    updatedProduct.ownerEmail = loggedInUserEmail;
+
+    const allProducts = fs.readFileSync('productDB.json');
 
     const parsedProducts = JSON.parse(allProducts);
             for(var i = 0; i < parsedProducts.length; i++) {
-                if(product.productId === parsedProducts[i].productId) {
+                if(updatedProduct.productId === parsedProducts[i].productId) {
                     
                     // Laver opdateret bruger
-                    if(product.title == "") {
-                        product.title = parsedProducts[i].title;
+                    if(updatedProduct.title == "") {
+                        updatedProduct.title = parsedProducts[i].title;
                     }
 
-                    if(product.category == "") {
-                        product.category = parsedProducts[i].category;
+                    if(updatedProduct.category == "") {
+                        updatedProduct.category = parsedProducts[i].category;
                     }
 
-                    if(product.price == "") {
-                        product.price = parsedProducts[i].price;
+                    if(updatedProduct.price == "") {
+                        updatedProduct.price = parsedProducts[i].price;
                     }
 
-                    // Sletter gammel bruger
+                    // Sletter gammel produkt
                     parsedProducts.splice(i, 1);
 
-                    // Tilføjer opdateret bruger
-                    parsedProducts.push(product);
+                    // Tilføjer opdateret produkt
+                    parsedProducts.push(updatedProduct);
                     
-                    // Tilføjer bruger array til db
+                    // Tilføjer produkt array til db
                     const jsonProducts = JSON.stringify(parsedProducts);
 
-                    fs.writeFileSync('userDB.json', jsonProducts);
-                    
-                    res.send("Succesfully updated product");
-                    return;
+                    fs.writeFileSync('productDB.json', jsonProducts);
                 }
             }
-            res.status(401).end();
+
+
+            const allUsers = fs.readFileSync('userDB.json');
+            const parsedUsers = JSON.parse(allUsers);
+
+            for(var i = 0; i < parsedUsers.length; i++) {
+                if(loggedInUserEmail === parsedUsers[i].email) {
+
+                    for(var j = 0; j < parsedUsers[i].products.length; j++) {
+                        if(parsedUsers[i].products[j].productId === updatedProduct.productId) {
+
+                            parsedUsers[i].products.splice(j, 1);
+                            parsedUsers[i].products.push(updatedProduct);
+                        }
+                    }
+                }
+            }
+
+            const jsonUsers = JSON.stringify(parsedUsers);
+            fs.writeFileSync('userDB.json', jsonUsers);
+            
+            res.send("Succesfully updated DB");
+            return;
 }
 
 
 
-module.exports = { saveUser, users, deleteUser, login, updateUser, loggedInUserEmail, createProduct, deleteProduct, getAllProducts, getAllUsersProducts, isLoggedIn,
-updateProduct }
+module.exports = { saveUser, deleteUser, login, updateUser, loggedInUserEmail, createProduct, deleteProduct, getAllProducts, getAllUsersProducts, isLoggedIn,
+updateProduct, logout }
