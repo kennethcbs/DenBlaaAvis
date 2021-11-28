@@ -4,6 +4,7 @@ const app = express();
 const data = require("./data")
 var path = require('path');
 var uniqid = require('uniqid'); 
+app.use(express.static(path.join(__dirname,'./pages')));
 app.use(express.json());
 
 app.get('/registration',(req, res) => {

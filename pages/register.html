@@ -3,7 +3,7 @@
 <head>
 	<meta charset = "UTF-8">
 	<title> My Form </title>
-	<link rel="stylesheet" href="styleRegistration.css">
+	<link rel="stylesheet" href="register.css">
 	<style>
 		body {
 			background-image: url("background1.jpg");
@@ -13,6 +13,7 @@
 	</style>
 </head>
 <body>
+<div id="register">
 	<form id="form">
 		<h1 class="text">Registration</h1>
 			<label>Username</label>
@@ -35,6 +36,7 @@
 	<ul>
     <li><a href="/login">login</a></li>
   </ul>
+</div>
     <script>
         document.getElementById("form").addEventListener("submit", (event) => {
             event.preventDefault();
