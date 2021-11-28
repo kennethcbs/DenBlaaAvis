@@ -121,6 +121,7 @@ function updateUser(user, res) {
                     if(user.username == "") {
                         user.username = parsedUsers[i].username;
                     }
+                    
 
                     // Sletter gammel bruger
                     parsedUsers.splice(i, 1);
@@ -179,7 +180,6 @@ function createProduct (newProduct, res) {
 
     // Hvis det lykkede at gemme produktet hos brugere, gå videre med at lægge produktet i productDB.json
     if (saveProductInUserSucess === false) {
-        console.log('dfjdkfjdkfj')
         res.status(401).end()
         return;
     } else  {
@@ -335,23 +335,23 @@ function updateProduct(updatedProduct, res) {
                 }
             }
 
-
+            // Går ind og læser vores userDB og parser den ud
             const allUsers = fs.readFileSync('userDB.json');
             const parsedUsers = JSON.parse(allUsers);
-
+            // Looper igennem vores array og finder brugeren vi er logget ind med og går videre til næste loop
             for(var i = 0; i < parsedUsers.length; i++) {
                 if(loggedInUserEmail === parsedUsers[i].email) {
-
+                    // Laver et nyt loop inde i loopet som finder brugerens produkt som er lige med det opdaterets produks ID
                     for(var j = 0; j < parsedUsers[i].products.length; j++) {
                         if(parsedUsers[i].products[j].productId === updatedProduct.productId) {
-
+                            // Sletter brugerens nuværende produkt og erstatter det med det nye produkt 
                             parsedUsers[i].products.splice(j, 1);
                             parsedUsers[i].products.push(updatedProduct);
                         }
                     }
                 }
             }
-
+            // Stringifyer arrayet til JSON object og tilføjer det til vores DB.json
             const jsonUsers = JSON.stringify(parsedUsers);
             fs.writeFileSync('userDB.json', jsonUsers);
             

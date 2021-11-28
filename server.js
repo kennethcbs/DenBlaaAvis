@@ -92,40 +92,9 @@ app.post('/updateUser', (req, res) => {
      data.updateUser(newUser, res)
 })
 
-// Endpoint to get all users
-app.get('/getAllUsers', (req, res) => {
-    data.getAllUsers(res)
-})
-
-// Endpoint to get all users
-app.get('/getLoggedInUser', (req, res) => {
-    data.getLoggedInUser(res);
-})
-
 // Endpoint to delete an user
 app.delete('/deleteUser', (req, res) => {
     data.deleteUser(res)
-})
-
-// Endpoint to update an user
-app.post('/updateUser/:userEmail', (req, res) => {
-    console.log(req.params.userEmail)
-
-    if (found) {
-        const index = data.users.findIndex(user => user.email === req.params.userEmail)
-        data.users.splice(index, 1)
-        let updatedUser = {
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password,
-            products: found.products
-        }
-        data.users.push(updatedUser)
-
-        } else {
-        console.log('User could not be found')
-    }
-    res.send(data.users)
 })
 
 // Endpoint to login

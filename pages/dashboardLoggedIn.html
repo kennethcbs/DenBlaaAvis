@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<!-- Benytter onload til at opdatere alle de nye produkter når man kommer ind på siden -->
 <body onload="getAllProducts()">
     <div>
         <p>Navigations</p>
@@ -21,7 +22,8 @@
         <option value="electronic">electronic</option>
         <option value="cloth">cloth</option>
         <option value="furnitures">furnitures</option>
-      </select>	
+      </select>
+      <!-- Knappen kalder på funktionen og sender alle produkterne ind på htmlen -->	
       <button onclick="getAllProductsWithCategory()" class="regbtn" type="submit" id="submit">Submit</button>
     <div id="productContainer"></div>
 
@@ -41,7 +43,6 @@
         }
 
         function getAllProductsWithCategory() {
-            let allProducts;
             const category = document.getElementById('category').value;
             console.log(category)
 
@@ -52,6 +53,7 @@
             .then((response) => {
                 if (response) {
                     console.log(response)
+                    // Laver en unordered list sammen med listed items til mine produkter
                     var str = '<ul>'
 
                     response.forEach(function(product) {
