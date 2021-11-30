@@ -1,4 +1,4 @@
-#register {
+#div {
     width: 320px;
     height: 420px;
     background: rgb(243, 110, 33);
@@ -11,7 +11,7 @@
     border-radius: 20px;
     }
     
-    .regbtn {
+    .btn {
         border: none;
         outline: none;
         height: 30px;
@@ -22,7 +22,7 @@
         text-align: center;
     }
     
-    .regbtn:Hover {
+    .btn:Hover {
         background-color: rgba(255, 68, 0, 0.801);
     }
     

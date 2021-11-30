@@ -3,7 +3,7 @@
 <head>
 	<meta charset = "UTF-8">
 	<title> My Form </title>
-	<link rel="stylesheet" href="styleRegistration.css">
+	<link rel="stylesheet" href="userSetting.css">
 	<style>
 		body {
 			background-image: url("background1.jpg");
@@ -13,6 +13,7 @@
 	</style>
 </head>
 <body onload="getAllUsersProducts()">
+<div id="div">
 	<form id="form">
 		<h1 class="text">Settings</h1>
 			<label>Username</label>
@@ -27,21 +28,19 @@
 			<input type="text" id="password" name="password" >
 			<br><br>
 
-			<button class="regbtn" type ="reset">Reset</button>
-            <input type="submit" placeholder="submit">
+			<button class="btn" type ="reset">Reset</button>
+      <button class="btn" type="submit">Update User</button>
         	</form>
-	<br><br>
-      <button onclick="deleteUser()" class="regbtn" type="submit" id="delete">Delete user</button>
-      <br><br><br><br>
-
-      <ul>
-            <li><a href="/dashboard">dashboard</a></li>
-
-          </ul>
-
-      <p>All your active products</p>
+	<br>
+      <form action="/dashboard">
+        <button class="btn">Return to dashboard</button>
+        <button onclick="deleteUser()" class="btn" type="submit" id="delete">Delete User</button>
+      </form>
+      <h3 class="text">All your active products</h3>
       <div id="allProducts"></div>
 
+
+</div>
     <script>
       function deleteUser() {
         console.log("slet bruger")
@@ -58,10 +57,6 @@
           .catch(() => {
             window.alert("Der skete en fejl");
           });
-      }
-
-      function updateProduct (productId) {
-        location.href = `/updateProduct/${productId}`;
       }
 
       // UPDATE USER
@@ -97,6 +92,10 @@
 
         });
 
+        function updateProduct (productId) {
+        location.href = `/updateProduct/${productId}`;
+      }
+
         function getAllUsersProducts() {
 
             fetch("http://localhost:3000/getAllUsersProducts", {
@@ -106,11 +105,11 @@
             .then((response) => {
                 if (response) {
                     var updateProduct = '<ul>'
-
+                      // Kalder en funktion for hvert produkt som er mit response
                     response.forEach(function(product) {
                         updateProduct += '<li>' + " " + product.title + " " + product.category + " " + product.price
-                           +  `<button value="${product.productId}" onclick="updateProduct(this.value)">` + "Update product"
-                           + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)">` + "Delete" + '</button>'
+                           +  `<button value="${product.productId}" onclick="updateProduct(this.value)" class="btn1">` + "Update product"
+                           + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)" class="btn1">` + "Delete" + '</button>'
                            + '</li>';
                     }); 
 

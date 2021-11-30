@@ -212,7 +212,7 @@ function getAllProducts(res) {
     // Returnere alle produkter
     res.send(parsedData);
     return;
-}
+} 
 
 function getAllUsersProducts(res) {
     // Henter alle produkter fra productDB og parser det til et array

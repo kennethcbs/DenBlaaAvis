@@ -138,7 +138,7 @@ app.delete('/deleteProduct', (req, res) => {
 
 app.get('/getAllProducts', (req, res) => {
     data.getAllProducts(res);
-})
+}) 
 
 app.get('/getAllUsersProducts', (req, res) => {
     data.getAllUsersProducts(res);

@@ -5,29 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="dashboardLoggedIn.css">
+    <style>
+		body {
+			background-image: url("background1.jpg");
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
 </head>
 <!-- Benytter onload til at opdatere alle de nye produkter når man kommer ind på siden -->
-<body onload="getAllProducts()">
+<body onload="getAllProductsWithCategory()">
+<div id="div">
     <div>
-        <p>Navigations</p>
-        <ul>
-            <li><a href="/settings">settings</a></li>
-            <li><a href="/createProduct">create Product</a></li>
-
-          </ul>
+        <h1 class="text">Welcome!</h1>
+        <p class="text">Navigations</p>
+        <form class="btn" action="/settings">
+            <button class="btn">Go to settings</button>
+        </form>
+        <br>
+        <form class="btn" action="/createProduct">
+            <button class="btn">Create your product</button>
+        </form>
     </div>
+    <br><br>
     <label>Category</label>
       <select id="category" name="category" required>
-        <option value="all">all</option>
-        <option value="electronic">electronic</option>
-        <option value="cloth">cloth</option>
-        <option value="furnitures">furnitures</option>
+        <option value="all">All Products</option>
+        <option value="electronic">Electronic</option>
+        <option value="cloth">Cloth</option>
+        <option value="furnitures">Furnitures</option>
       </select>
       <!-- Knappen kalder på funktionen og sender alle produkterne ind på htmlen -->	
       <button onclick="getAllProductsWithCategory()" class="regbtn" type="submit" id="submit">Submit</button>
-    <div id="productContainer"></div>
+    <div id="productContainer">
 
-    <button id="logout" onclick="logout()">Logout</button>
+    </div>
+
+    <button class="btn" onclick="logout()">Logout</button>
+</div>
     <script>
         function logout() {
             fetch("http://localhost:3000/logout", {
@@ -74,35 +90,6 @@
             });
             
         }
-
-
-        function getAllProducts() {
-            let allProducts;
-
-            fetch("http://localhost:3000/getAllProducts", {
-             method: "GET",
-            })
-            .then((response) => response.json())
-            .then((response) => {
-                if (response) {
-                    console.log(response)
-                    var str = '<ul>'
-
-                    response.forEach(function(product) {
-                        str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
-                    }); 
-
-                    str += '</ul>';
-
-                    document.getElementById("productContainer").innerHTML = str;
-                } 
-            })
-            .catch(() => {
-                window.alert("Der skete en fejl");
-            });
-            
-        }
-
 
     </script>
 </body>

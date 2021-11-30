@@ -13,9 +13,13 @@
 	</style>
 </head>
 <body>
-<div id="register">
+<div id="div">
 	<form id="form">
-		<h1 class="text">Registration</h1>
+    <h1 class="text">
+      Welcome to
+      <br> 
+      The Private Market
+      </h1>
 			<label>Username</label>
 			<input type="text" id='username' name="username" placeholder="Kenneth" required>
 			<br><br>
@@ -28,14 +32,14 @@
 			<input type="password" id="password" name="password" required>
 			<br><br>
 
-			<button class="regbtn" type ="reset">Reset</button>
-            <input type="submit" placeholder="submit">
-        	</form>
-	<br><br><br> <br>
+			<button class="btn" type ="reset">Reset</button>
+      <button class="btn" type="submit">Login</button>
+          </form>
+	<br><br><br> 
 	<p class="text">Already have an account?</p>
-	<ul>
-    <li><a href="/login">login</a></li>
-  </ul>
+  <form class="btn" action="/login">
+		<button class="btn">Sign in</button>
+	</form>
 </div>
     <script>
         document.getElementById("form").addEventListener("submit", (event) => {

@@ -5,19 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="dashBoard.css">
+    <style>
+		body {
+			background-image: url("background1.jpg");
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
 </head>
 <body onload="getAllProducts()">
+<div id="div">
     <div>
-        <p>Navigations</p>
-        <ul>
-            <li><a href="/login">login</a></li>
-            <li><a href="/registration">register</a></li>
-          </ul>
+        <h2 class="text">You are not logged in</h3>
+        <h3 class="text">Where do you want to navigate to?</h3>
+            <form class="btn" action="/login">
+                <button class="btn">Login</button>
+            </form>
+            <br>
+            <form class="btn" action="/registration">
+                <button class="btn">Register</button>
+            </form>
     </div>
+    <br>
+    <h3 class="text">All products to sale listed below</h3>
     <div id="productContainer">
 
     </div>
-
+</div>
     <script>
         function getAllProducts() {
 
