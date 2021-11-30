@@ -1,0 +1,45 @@
+#div {
+    width: 350px;
+    height: 450px;
+    background: rgb(243, 110, 33);
+    color: #fff;
+    top: 58%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 20px;
+    }
+    .btn {
+        border: none;
+        outline: none;
+        height: 30px;
+        background: rgb(235, 75, 17);
+        color: #fff;
+        font-size: 18px;
+        border-radius: 20px;
+        text-align: center;
+    }
+
+    .btn1 {
+        border: none;
+        outline: none;
+        height: 25px;
+        background: rgb(235, 75, 17);
+        color: #fff;
+        font-size: 15px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 2%;
+    }
+    
+    .btn1:Hover {
+        background-color: rgba(255, 68, 0, 0.801);
+    }
+    .btn:Hover {
+        background-color: rgba(255, 68, 0, 0.801);
+    }
+    
+    .text{
+        text-align: center;
+    }
