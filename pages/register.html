@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<meta charset = "UTF-8">
+	<title> My Form </title>
+	<link rel="stylesheet" href="styleRegistration.css">
+	<style>
+		body {
+			background-image: url("background1.jpg");
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
+</head>
+<body>
+	<form id="form">
+		<h1 class="text">Registration</h1>
+			<label>Username</label>
+			<input type="text" id='username' name="username" placeholder="Kenneth" required>
+			<br><br>
+
+			<label>Email ID</label>
+			<input type="email" id='email' name="email" placeholder="Example@example.com" required>
+			<br><br>
+
+			<label>Password</label>
+			<input type="password" id="password" name="password" required>
+			<br><br>
+
+			<button class="regbtn" type ="reset">Reset</button>
+            <input type="submit" placeholder="submit">
+        	</form>
+	<br><br><br> <br>
+	<p class="text">Already have an account?</p>
+	<ul>
+    <li><a href="/login">login</a></li>
+  </ul>
+    <script>
+        document.getElementById("form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const username = document.getElementById("username").value
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value
+
+            const user = {
+                username: username,
+                email: email,
+                password: password
+            }
+            
+        fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user)
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response) {
+           location.href = "/login";
+           console.log(response)
+          } 
+        })
+        .catch(() => {
+          window.alert("User already exist");
+        });
+
+        });
+      </script> 
+  </body>
+</html>

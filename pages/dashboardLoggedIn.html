@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<!-- Benytter onload til at opdatere alle de nye produkter når man kommer ind på siden -->
+<body onload="getAllProducts()">
+    <div>
+        <p>Navigations</p>
+        <ul>
+            <li><a href="/settings">settings</a></li>
+            <li><a href="/createProduct">create Product</a></li>
+
+          </ul>
+    </div>
+    <label>Category</label>
+      <select id="category" name="category" required>
+        <option value="all">all</option>
+        <option value="electronic">electronic</option>
+        <option value="cloth">cloth</option>
+        <option value="furnitures">furnitures</option>
+      </select>
+      <!-- Knappen kalder på funktionen og sender alle produkterne ind på htmlen -->	
+      <button onclick="getAllProductsWithCategory()" class="regbtn" type="submit" id="submit">Submit</button>
+    <div id="productContainer"></div>
+
+    <button id="logout" onclick="logout()">Logout</button>
+    <script>
+        function logout() {
+            fetch("http://localhost:3000/logout", {
+                method: "POST",
+            })
+            .then((response) => response.text())
+            .then((response) => {
+                if(response) {
+                    location.href = "/dashboard";
+                    window.alert("logged out")
+                }
+            })
+        }
+
+        function getAllProductsWithCategory() {
+            const category = document.getElementById('category').value;
+            console.log(category)
+
+            fetch("http://localhost:3000/getAllProducts", {
+            method: "GET",
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response) {
+                    console.log(response)
+                    // Laver en unordered list sammen med listed items til mine produkter
+                    var str = '<ul>'
+
+                    response.forEach(function(product) {
+                        if(category === "all") {
+                            str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                        } else if(product.category === category) {
+                            str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                        }
+                    }); 
+
+                    str += '</ul>';
+
+                    document.getElementById("productContainer").innerHTML = str;
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl");
+            });
+            
+        }
+
+
+        function getAllProducts() {
+            let allProducts;
+
+            fetch("http://localhost:3000/getAllProducts", {
+             method: "GET",
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response) {
+                    console.log(response)
+                    var str = '<ul>'
+
+                    response.forEach(function(product) {
+                        str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                    }); 
+
+                    str += '</ul>';
+
+                    document.getElementById("productContainer").innerHTML = str;
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl");
+            });
+            
+        }
+
+
+    </script>
+</body>
+</html>

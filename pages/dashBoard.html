@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="getAllProducts()">
+    <div>
+        <p>Navigations</p>
+        <ul>
+            <li><a href="/login">login</a></li>
+            <li><a href="/registration">register</a></li>
+          </ul>
+    </div>
+    <div id="productContainer">
+
+    </div>
+
+    <script>
+        function getAllProducts() {
+
+            fetch("http://localhost:3000/getAllProducts", {
+             method: "GET",
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response) {
+                    console.log(response)
+                    var productListString = '<ul>'
+
+                    response.forEach(function(product) {
+                        productListString += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                    }); 
+
+                    productListString += '</ul>';
+
+                    document.getElementById("productContainer").innerHTML = productListString;
+                } 
+            })
+            .catch(() => {
+                window.alert("Der skete en fejl");
+            });
+            
+        }
+
+
+    </script>
+</body>
+</html>
