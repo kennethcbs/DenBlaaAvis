@@ -3,7 +3,7 @@
 <head>
 	<meta charset = "UTF-8">
 	<title> My Form </title>
-	<link rel="stylesheet" href="styleLogin.css">
+	<link rel="stylesheet" href="login.css">
 	<style>
 		body {
 			background-image: url("background1.jpg");
@@ -13,8 +13,11 @@
 	</style>
 </head>
 <body>
+  <div id="div">
 		<form id="form">
-			<h1 class="text">Login</h1>
+			<h1 class="text">Login to 
+        <br>
+        The Private Market</h1>
 			<label>Email:</label>
 			<input type ="email" id='email' name="email" placeholder="Example@example.com" required>
 			<br>
@@ -23,14 +26,15 @@
 			<input type="password" id="password" name="password" required>
 			<br>
 			<br>
-			<button class="loginbtn" type ="reset">Reset</button>
-			<button class="loginbtn" type ="submit">Submit</button>
+			<button class="btn" type ="reset">Reset</button>
+			<button class="btn" type ="submit">Submit</button>
 			</form>
 			<br><br><br> <br>
 			<p class="text" >Don't have an account?</p>
-			<form class="loginbtn" action="/registration">
-				<button class="loginbtn">Register an account</button>
+			<form class="btn" action="/registration">
+				<button class="btn">Register an account</button>
 			</form>
+  </div>
 
     <script>
         document.getElementById("form").addEventListener("submit", (event) => {
@@ -38,8 +42,6 @@
 
             const email = document.getElementById("email").value
             const password = document.getElementById("password").value
-            const emailJSON = JSON.stringify(email)
-            const passwordJSON = JSON.stringify(password)
 
             const login = {
                 email: email,

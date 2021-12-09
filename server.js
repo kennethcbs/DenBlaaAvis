@@ -4,6 +4,7 @@ const app = express();
 const data = require("./data")
 var path = require('path');
 var uniqid = require('uniqid'); 
+app.use(express.static(path.join(__dirname,'./pages')));
 app.use(express.json());
 
 app.get('/registration',(req, res) => {
@@ -71,7 +72,6 @@ app.get('/updateProduct/:productId',(req, res) => {
 ////////////////////
 
 app.post('/register', (req, res) => {
-// Laver en ny bruger som vil kalde på vores function saveUser
    let newUser = { 
         username: req.body.username,
         email: req.body.email,
@@ -137,7 +137,7 @@ app.delete('/deleteProduct', (req, res) => {
 
 app.get('/getAllProducts', (req, res) => {
     data.getAllProducts(res);
-})
+}) 
 
 app.get('/getAllUsersProducts', (req, res) => {
     data.getAllUsersProducts(res);

@@ -1,0 +1,31 @@
+#div {
+    width: 320px;
+    height: 420px;
+    background: rgb(243, 110, 33);
+    color: #fff;
+    top: 55%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    border-radius: 20px;
+    }
+    
+    .btn {
+        border: none;
+        outline: none;
+        height: 30px;
+        background: rgb(235, 75, 17);
+        color: #fff;
+        font-size: 18px;
+        border-radius: 20px;
+        text-align: center;
+    }
+    
+    .btn:Hover {
+        background-color: rgba(255, 68, 0, 0.801);
+    }
+    
+    .text{
+        text-align: center;
+    }
