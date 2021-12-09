@@ -6,5 +6,5 @@ describe('test logout', function() {
     const loggedIn = data.isLoggedIn();
     // Har sat loggedIn skal være med lige false
     assert.equal(loggedIn, false);
-  })
+  }) 
 })

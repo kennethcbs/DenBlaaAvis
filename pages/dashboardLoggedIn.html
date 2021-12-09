@@ -69,20 +69,19 @@
             .then((response) => {
                 if (response) {
                     console.log(response)
-                    // Laver en unordered list sammen med listed items til mine produkter
-                    var str = '<ul>'
+                    var listProducts = '<ul>'
 
                     response.forEach(function(product) {
                         if(category === "all") {
-                            str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                            listProducts += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
                         } else if(product.category === category) {
-                            str += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
+                            listProducts += '<li>'+ " " + product.title + " " + product.category + " " + product.price + '</li>';
                         }
                     }); 
 
-                    str += '</ul>';
+                    listProducts += '</ul>';
 
-                    document.getElementById("productContainer").innerHTML = str;
+                    document.getElementById("productContainer").innerHTML = listProducts;
                 } 
             })
             .catch(() => {

@@ -109,7 +109,8 @@
                     response.forEach(function(product) {
                         updateProduct += '<li>' + " " + product.title + " " + product.category + " " + product.price
                            +  `<button value="${product.productId}" onclick="updateProduct(this.value)" class="btn1">` + "Update product"
-                           + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)" class="btn1">` + "Delete" + '</button>'
+                           + '</button>' + `<button value="${product.productId}" onclick="deleteProduct(this.value)" class="btn1">` + "Delete" + 
+                            '</button>'
                            + '</li>';
                     }); 
 
@@ -121,9 +122,6 @@
             .catch(() => {
                 window.alert("Der skete en fejl");
             });
-
-
-            
         }
 
         function deleteProduct(productId) {
@@ -149,6 +147,7 @@
                 window.alert("Der skete en fejl prøvede at slette");
             });
         }
+        
       </script> 
   </body>
 </html>

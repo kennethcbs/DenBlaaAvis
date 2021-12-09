@@ -72,7 +72,6 @@ app.get('/updateProduct/:productId',(req, res) => {
 ////////////////////
 
 app.post('/register', (req, res) => {
-// Laver en ny bruger som vil kalde på vores function saveUser
    let newUser = { 
         username: req.body.username,
         email: req.body.email,

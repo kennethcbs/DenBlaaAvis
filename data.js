@@ -10,8 +10,6 @@ var loggedInUserEmail = "";
 ////////////////////////////////
 
 // Spørger min if statment om min loggedInUser er lige med et tomt felt
-// Hvis feltet ikke er tomt returnere den false og betyder at der er en bruger logget ind
-// Hvis feltet er tomt returnere den true og betyder at der ikke er en bruger logget ind
 function isLoggedIn() {
     if(loggedInUserEmail === "") {
         return false;
@@ -299,6 +297,7 @@ function deleteProduct(productId, res) {
         return;
     } 
 }
+
 
 function updateProduct(updatedProduct, res) {
     updatedProduct.ownerEmail = loggedInUserEmail;
